@@ -14,10 +14,8 @@ def init_mlp(inputs, targets, nhidden):
     nhidden = nhidden
 
     # Initialize network
-    # weights1 = (np.random.rand(nin+1, nhidden)-0.5)*2/np.sqrt(nin)
-    # weights2 = (np.random.rand(nhidden+1, nout)-0.5)*2/np.sqrt(nhidden)
-    weights1 = np.array([[0.24, 0.27], [0.11, -0.03], [-0.39, 0.6]])
-    weights2 = np.array([[-0.4], [-0.14], [0.04]])
+    weights1 = (np.random.rand(nin+1, nhidden)-0.5)*2/np.sqrt(nin)
+    weights2 = (np.random.rand(nhidden+1, nout)-0.5)*2/np.sqrt(nhidden)
 
     return weights1, weights2
 
@@ -62,8 +60,9 @@ def calc_gradient_w1(activations, input_x, weights1_gradient, weights2, weights2
 
 def calc_gradient_w2(activations, expected_output_y, weights2_error, weights2_gradient, y_hat):
     for i, output_neuron in enumerate(expected_output_y):
+        error = (y_hat[i] - output_neuron) * y_hat[i] * (1-y_hat[i])
         for j, weights_to_output_neuron in enumerate(add_bias_to_activations(activations[0])):
-            weights2_error[j][i] += weights_to_output_neuron
+            weights2_error[j][i] += error
             weights2_gradient[j][i] += weights_to_output_neuron * calc_error(i, output_neuron, y_hat)
 
 
